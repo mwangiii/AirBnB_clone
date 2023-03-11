@@ -3,9 +3,9 @@ import cmd
 
 
 class HBNBCommand(cmd.Cmd):
-    # """class that in herits from cmd"""
+    """class that in herits from cmd"""
 
-    # prompt = "(hbnb)"
+    prompt = "(hbnb)"
     # __classes = {
     #     "BaseModel",
     #     "User",
@@ -16,12 +16,12 @@ class HBNBCommand(cmd.Cmd):
     #     "Review"
     # }
 
-    def do_quit(self, arg):
+    def do_quit(self, line):
 
         """Quit command to exit the program"""
         return True
 
-    def do_EOF(self, arg):
+    def do_EOF(self, line):
         """An end of line input"""
         return True
 
