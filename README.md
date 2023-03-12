@@ -9,4 +9,4 @@ Using a system of JSON serialization/deserialization, storage is persistent betw
 
 | Tasks | Files | Description |
 | ----- | ----- | ------ |
-| 0: Authors/README File | [Authors](https://github.com/mwangiii/AirBnB_clone/blob/main/Authors) | Project authors |
+| 0: Authors/README File | [AUTHORS](https://github.com/mwangiii/AirBnB_clone/blob/main/AUTHORS) | Project authors |
