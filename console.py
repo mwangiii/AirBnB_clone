@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import cmd
-from models.base_model import BaseModel
+from models.base_model import BaseModelcd 
 from models.user import User
 from models.amenity import Amenity
 from models.city import City
