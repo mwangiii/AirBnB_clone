@@ -1,8 +1,13 @@
 #!/usr/bin/python3
 import cmd
-#from models import storage
-# from models.base_model import BaseModel
-# from models.user import User
+from models.base_model import BaseModel
+from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.state import State
+from models.review import Review
+from models.place import Place
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -44,7 +49,6 @@ class HBNBCommand(cmd.Cmd):
             b.save()
             print(b.id)
 
-
     def do_show(self, line):
         """show Method"""
         args = line.split()
@@ -66,7 +70,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-
     def do_destroy(self, arg):
         """
             Deletes an instance based on the class name and id
@@ -80,11 +83,11 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 1:
             print("** instance id missing **")
             return
-    
+
         if args[0] not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
-    
+            print("** class doesn't exist **")
+            return
+
         class_name = args[0]
         instance_id = args[1]
         if class_name and instance_id:
@@ -99,7 +102,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             ("**class doesn't exist**")
 
-
     def do_all(self, arg):
         """do all method"""
         all_obj = storage.all()
@@ -112,14 +114,13 @@ class HBNBCommand(cmd.Cmd):
             for key in all_obj.keys():
                 if type(all_obj[key]).__name__ == args[0]:
                     print(all_obj[key])
-        if arg [0] not in HBNBCommand.classes:
+        if arg[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
 
-
     def do_update(self, arg):
-        """update <class name> <id> <attribute name> 
-            "<attribute value>"
-       """ 
+        """update <class name> <id> <attribute name>
+        "<attribute value>"
+       """
         args = arg.split()
         if len(args) == 0:
             print("**class name is missing**")
@@ -138,8 +139,8 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name = args[0]
         instance_id = args[1]
-        attr_name = args[2]        
-        attr_value= args[3]
+        attr_name = args[2]
+        attr_value = args[3]
         if class_name and instance_id and attr_name and attr_value:
             all_objs = storage.all()
             key = class_name + "." + instance_id
@@ -149,8 +150,6 @@ class HBNBCommand(cmd.Cmd):
                 storage.save()
             else:
                 print("** no instance found **")
-
-
 
 
 if __name__ == '__main__':
