@@ -38,6 +38,7 @@ class HBNBCommand(cmd.Cmd):
             'Review',
             'State'
         ]
+
         def do_create(self, line):
             """
             Creates a new instance of a class, saves it and prints the id
