@@ -8,7 +8,7 @@ class BaseModel:
     """Base model class for all other classes to inherit from"""
     def __init__(self, *args, **kwargs):
         """Constructor method to initialize attributes"""
-         if not kwargs:
+        if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
@@ -28,13 +28,16 @@ class BaseModel:
         return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
 
     def save(self):
-        """Updates the public instance attribute updated_at with the current datetime"""
+        """Updates the public instance attribute updated_at
+          with the current datetime
+        """
         from models import storage
         self.updated_at = datetime.now()
         storage.save()
 
     def to_dict(self):
-        """Returns a dictionary containing all keys/values of __dict__ of the instance"""
+        """Returns a dictionary containing all keys/values
+        of __dict__ of the instance"""
         dictionary = {}
         dictionary.update(self.__dict__)
         dictionary.update({'__class__':
