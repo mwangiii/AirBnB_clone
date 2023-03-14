@@ -38,37 +38,20 @@ class HBNBCommand(cmd.Cmd):
             'Review',
             'State'
         ]
-        if model_type in model_types:
-            if model_type == 'BaseModel':
-                bm = BaseModel()
-                bm.save()
-                print(bm.id)
-            if model_type == 'User':
-                user = User()
-                user.save()
-                print(user.id)
-            if model_type == 'City':
-                city = City()
-                city.save()
-                print(city.id)
-            if model_type == 'Amenity':
-                amenity = Amenity()
-                amenity.save()
-                print(amenity.id)
-            if model_type == 'Place':
-                place = Place()
-                place.save()
-                print(place.city_id)
-            if model_type == 'Review':
-                review = Review()
-                review.save()
-                print(review.id)
-            if model_type == 'State':
-                state = State()
-                state.save()
-                print(state.id)
+        def do_create(self, line):
+            """
+            Creates a new instance of a class, saves it and prints the id
+            """
+        args = line.split()
+        if len(args) == 0:
+            print("** class name missing **")
         else:
-            print("** class doesn't exist **")
+            if not args[0] in self.__classes:
+                print("** class doesn't exist **")
+            else:
+                new_inst = eval(args[0])()
+                new_inst.save()
+                print("{}".format(new_inst.id))
 
     def do_show(self, line):
         """show Method"""
