@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
 import cmd
 from models.base_model import BaseModel
 from models.user import User
@@ -11,44 +12,63 @@ from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
-    """class that in herits from cmd"""
-
-    prompt = "(hbnb)"
-    __classes = {
-        "BaseModel",
-        "User",
-        "State",
-        "City",
-        "Place",
-        "Amenity",
-        "Review"
-        }
+    """class HNNBC gets cm.Cmd"""
+    prompt = "(hbnb) "
 
     def do_quit(self, line):
-
         """Quit command to exit the program"""
         return True
 
     def do_EOF(self, line):
-        """An end of line input"""
+        """EOF to exit the program"""
         return True
 
-    def do_emptyline(self):
-        """an empty line + ENTER shouldnt execute anything"""
+    def emptyline(self):
+        """Do nothing upon Enter on empty line"""
         pass
 
-    def do_create(self, line):
-        """creates an instance"""
-        arg = line.split()
-        if len(arg) == 0:
-            print("** class name missing **")
+    def do_create(self, model_type):
+        """create methode"""
+        model_types = [
+            'BaseModel',
+            'User',
+            'City',
+            'Amenity',
+            'Place',
+            'Review',
+            'State'
+        ]
+        if model_type in model_types:
+            if model_type == 'BaseModel':
+                bm = BaseModel()
+                bm.save()
+                print(bm.id)
+            if model_type == 'User':
+                user = User()
+                user.save()
+                print(user.id)
+            if model_type == 'City':
+                city = City()
+                city.save()
+                print(city.id)
+            if model_type == 'Amenity':
+                amenity = Amenity()
+                amenity.save()
+                print(amenity.id)
+            if model_type == 'Place':
+                place = Place()
+                place.save()
+                print(place.city_id)
+            if model_type == 'Review':
+                review = Review()
+                review.save()
+                print(review.id)
+            if model_type == 'State':
+                state = State()
+                state.save()
+                print(state.id)
         else:
-            if not arg[0] in self.__classes:
-                print("** class doesn't exist **")
-            else:
-                new_inst = eval(arg[0])()
-                new_inst.save()
-                print("{}".format(new_inst.id))
+            print("** class doesn't exist **")
 
     def do_show(self, line):
         """show Method"""
@@ -71,72 +91,56 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def do_destroy(self, arg):
-        """
-            Deletes an instance based on the class name and id
-        """
-        args = arg.split()
-
+    def do_destroy(self, line):
+        """destroy method"""
+        args = line.split()
         if len(args) == 0:
-            print("**class name is missing**")
+            print("** class name missing **")
             return
-
         if len(args) == 1:
             print("** instance id missing **")
             return
-
-        if args[0] not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
-            return
-
         class_name = args[0]
         instance_id = args[1]
         if class_name and instance_id:
-            all_objs = storage.all()
+            all_obj = storage.all()
             key = class_name + "." + instance_id
-            if key in all_objs:
-                del all_objs[key]
-                print(all_objs[key])
+            if key in all_obj:
+                del all_obj[key]
                 storage.save()
             else:
                 print("** no instance found **")
         else:
-            ("**class doesn't exist**")
+            print("** class doesn't exist **")
 
-    def do_all(self, arg):
+    def do_all(self, line):
         """do all method"""
         all_obj = storage.all()
-        args = arg.split()
+        args = line.split()
         if len(args) == 0:
-            for key in all_obj([key]):
+            for key in all_obj.keys():
                 print(all_obj[key])
-
         elif args[0] in all_obj:
             for key in all_obj.keys():
                 if type(all_obj[key]).__name__ == args[0]:
                     print(all_obj[key])
-        if arg[0] not in HBNBCommand.__classes:
+        else:
             print("** class doesn't exist **")
 
-    def do_update(self, arg):
-        """update <class name> <id> <attribute name>
-        "<attribute value>"
-       """
-        args = arg.split()
+    def do_update(self, line):
+        """update method"""
+        args = line.split()
         if len(args) == 0:
-            print("**class name is missing**")
+            print("** class name missing **")
             return
         if len(args) == 1:
             print("** instance id missing **")
             return
         if len(args) == 2:
-            print("** attribute name missing ** ")
+            print("** attribute name missing **")
             return
         if len(args) == 3:
             print("** value missing **")
-            return
-        if args[0] not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
             return
         class_name = args[0]
         instance_id = args[1]
@@ -151,6 +155,8 @@ class HBNBCommand(cmd.Cmd):
                 storage.save()
             else:
                 print("** no instance found **")
+        else:
+            print("** class doesn't exist **")
 
 
 if __name__ == '__main__':
