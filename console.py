@@ -14,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     """class that in herits from cmd"""
 
     prompt = "(hbnb)"
-    classes = {
+    classes = [
         "BaseModel",
         "User",
         "State",
@@ -22,7 +22,7 @@ class HBNBCommand(cmd.Cmd):
         "Place",
         "Amenity",
         "Review"
-    }
+        ]
 
     def do_quit(self, line):
 
