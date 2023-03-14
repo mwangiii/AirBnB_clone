@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 import cmd
 from models.base_model import BaseModel
 from models.user import User
@@ -14,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     """class that in herits from cmd"""
 
     prompt = "(hbnb)"
-    classes = [
+    classes = {
         "BaseModel",
         "User",
         "State",
@@ -22,7 +22,7 @@ class HBNBCommand(cmd.Cmd):
         "Place",
         "Amenity",
         "Review"
-        ]
+        }
 
     def do_quit(self, line):
 
@@ -33,7 +33,7 @@ class HBNBCommand(cmd.Cmd):
         """An end of line input"""
         return True
 
-    def emptyline(self):
+    def do_emptyline(self):
         """an empty line + ENTER shouldnt execute anything"""
         pass
 
