@@ -14,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     """class that in herits from cmd"""
 
     prompt = "(hbnb)"
-    classes = {
+    __classes = {
         "BaseModel",
         "User",
         "State",
@@ -37,17 +37,18 @@ class HBNBCommand(cmd.Cmd):
         """an empty line + ENTER shouldnt execute anything"""
         pass
 
-    def do_create(self, class_name):
-        """Creates an instance"""
-        if class_name == "":
+    def do_create(self, line):
+        """creates an instance"""
+        arg = line.split()
+        if len(arg) == 0:
             print("** class name missing **")
-
-        elif class_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
         else:
-            b = HBNBCommand.classes.dict[class_name]()
-            b.save()
-            print(b.id)
+            if not arg[0] in self.__classes:
+                print("** class doesn't exist **")
+            else:
+                new_inst = eval(arg[0])()
+                new_inst.save()
+                print("{}".format(new_inst.id))
 
     def do_show(self, line):
         """show Method"""
@@ -84,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
 
-        if args[0] not in HBNBCommand.classes:
+        if args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
 
@@ -114,7 +115,7 @@ class HBNBCommand(cmd.Cmd):
             for key in all_obj.keys():
                 if type(all_obj[key]).__name__ == args[0]:
                     print(all_obj[key])
-        if arg[0] not in HBNBCommand.classes:
+        if arg[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
 
     def do_update(self, arg):
@@ -134,7 +135,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 3:
             print("** value missing **")
             return
-        if args[0] not in HBNBCommand.classes:
+        if args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
             return
         class_name = args[0]
