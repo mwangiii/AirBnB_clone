@@ -21,8 +21,13 @@ class HBNBCommand(cmd.Cmd):
 
     valid_attrs = ['id', 'created_at', 'updated_at']
 
-    classes = {"BaseModel", "User", "State",
-                 "City", "Amenity", "Place", "Review"}
+    classes = {"BaseModel": BaseModel,
+               "User" :User, 
+               "State": State, 
+               "City" : City,  
+               "Amenity": Amenity, 
+               "Place": Place, 
+               "Review": Review}
 
     def emptyline(self):
         """
