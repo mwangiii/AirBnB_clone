@@ -18,8 +18,11 @@ class HBNBCommand(cmd.Cmd):
     This class defines a command interpreter.
     """
     prompt = '(hbnb) '
-    classes = {'BaseModel': BaseModel}
+
     valid_attrs = ['id', 'created_at', 'updated_at']
+
+    __classes = {"BaseModel", "User", "State",
+                 "City", "Amenity", "Place", "Review"}
 
     def emptyline(self):
         """
@@ -49,11 +52,11 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args.split()[0]
-        if class_name not in self.classes:
+        if class_name not in self.__classes:
             print("** class doesn't exist **")
             return
 
-        new_instance = self.classes[class_name]()
+        new_instance = self.__classes[class_name]()
         new_instance.save()
         print(new_instance.id)
 
@@ -68,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args_list[0]
-        if class_name not in self.classes:
+        if class_name not in self.__classes:
             print("** class doesn't exist **")
             return
 
