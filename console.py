@@ -13,6 +13,7 @@ from models.review import Review
 from models.place import Place
 from models.__init__ import storage
 
+
 class HBNBCommand(cmd.Cmd):
     """
     This class defines a command interpreter.
@@ -22,11 +23,11 @@ class HBNBCommand(cmd.Cmd):
     valid_attrs = ['id', 'created_at', 'updated_at']
 
     classes = {"BaseModel": BaseModel,
-               "User" :User, 
-               "State": State, 
-               "City" : City,  
-               "Amenity": Amenity, 
-               "Place": Place, 
+               "User": User,
+               "State": State,
+               "City": City,
+               "Amenity": Amenity,
+               "Place": Place,
                "Review": Review}
 
     def emptyline(self):
