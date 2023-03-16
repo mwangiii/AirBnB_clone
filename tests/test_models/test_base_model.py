@@ -45,6 +45,7 @@ class test_basemodel(unittest.TestCase):
         copy.update({1: 2})
         with self.assertRaises(TypeError):
             new = BaseModel(**copy)
+            
     def test_save(self):
         """ Testing save """
         i = self.value()
@@ -77,3 +78,21 @@ class test_basemodel(unittest.TestCase):
         n = {'Name': 'test'}
         with self.assertRaises(KeyError):
             new = self.value(**n)
+            
+    def test_id(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.id), str)
+
+    def test_created_at(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.created_at), datetime.datetime)
+
+    def test_updated_at(self):
+        """ """
+        new = self.value()
+        self.assertEqual(type(new.updated_at), datetime.datetime)
+        n = new.to_dict()
+        new = BaseModel(**n)
+        self.assertFalse(new.created_at == new.updated_at)
