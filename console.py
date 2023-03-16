@@ -9,10 +9,11 @@ from models.amenity import Amenity
 from models.city import City
 from models.state import State
 from models.review import Review
-from models.place import Place 
+from models.place import Place
 from models.__init__ import storage
-class HBNBCommand(cmd.Cmd):
 
+
+class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
     classes = {'BaseModel': BaseModel}
@@ -31,19 +32,18 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
 
-
     def help_quit(self):
         """
             Help documentation for quit command
         """
         print('Quit command: Exits the program')
-    
+
     def do_EOF(self, args):
         """
         This method quits the command interpreter on EOF.
         """
         return True
-    
+
     def help_EOF(self):
         """Help documentation for EOF command"""
         print('EOF command: Exits the program')
@@ -51,7 +51,7 @@ class HBNBCommand(cmd.Cmd):
     def help_help(self):
         """Help documentation for help command"""
         print('Help command: Displays help documentation')
-    
+
     def do_create(self, args):
         """
         This method creates a new instance of BaseModel,
