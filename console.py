@@ -2,59 +2,22 @@
 """
 This module contains the entry point of the command interpreter.
 """
-from models.base_model import BaseModel
 import cmd
-
-
-class HBNBCommand(cmd.Cmd):
-    """
-    A command interpreter for the HBNB project.
-    """
-    prompt = '(hbnb) '
-
-    def do_quit(self, arg):
-        """Quit command to exit the program"""
-        return True
-
-    def do_EOF(self, arg):
-        """EOF command to exit the program"""
-        print()
-        return True
-
-    def emptyline(self):
-        """Do nothing on empty line"""
-        pass
-
-    def help_quit(self):
-        """Help documentation for quit command"""
-        print('Quit command: Exits the program')
-
-    def help_EOF(self):
-        """Help documentation for EOF command"""
-        print('EOF command: Exits the program')
-
-    def help_help(self):
-        """Help documentation for help command"""
-        print('Help command: Displays help documentation')
-
-    #!/usr/bin/python3
-"""
-This module defines a command interpreter class that
-parses and executes commands entered by the user.
-"""
-
-import cmd
-import json
 from models.base_model import BaseModel
-
-
+from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.state import State
+from models.review import Review
+from models.place import Place 
+from models.__init__ import storage
 class HBNBCommand(cmd.Cmd):
-    """
-    This class defines a command interpreter.
-    """
+
+
     prompt = '(hbnb) '
     classes = {'BaseModel': BaseModel}
     valid_attrs = ['id', 'created_at', 'updated_at']
+    __objects = storage.all()
 
     def emptyline(self):
         """
@@ -68,12 +31,27 @@ class HBNBCommand(cmd.Cmd):
         """
         return True
 
+
+    def help_quit(self):
+        """
+            Help documentation for quit command
+        """
+        print('Quit command: Exits the program')
+    
     def do_EOF(self, args):
         """
         This method quits the command interpreter on EOF.
         """
         return True
+    
+    def help_EOF(self):
+        """Help documentation for EOF command"""
+        print('EOF command: Exits the program')
 
+    def help_help(self):
+        """Help documentation for help command"""
+        print('Help command: Displays help documentation')
+    
     def do_create(self, args):
         """
         This method creates a new instance of BaseModel,
