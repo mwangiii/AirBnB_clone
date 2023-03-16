@@ -2,16 +2,50 @@
 """
 This module contains the entry point of the command interpreter.
 """
+from models.base_model import BaseModel
+import cmd
+
+
+class HBNBCommand(cmd.Cmd):
+    """
+    A command interpreter for the HBNB project.
+    """
+    prompt = '(hbnb) '
+
+    def do_quit(self, arg):
+        """Quit command to exit the program"""
+        return True
+
+    def do_EOF(self, arg):
+        """EOF command to exit the program"""
+        print()
+        return True
+
+    def emptyline(self):
+        """Do nothing on empty line"""
+        pass
+
+    def help_quit(self):
+        """Help documentation for quit command"""
+        print('Quit command: Exits the program')
+
+    def help_EOF(self):
+        """Help documentation for EOF command"""
+        print('EOF command: Exits the program')
+
+    def help_help(self):
+        """Help documentation for help command"""
+        print('Help command: Displays help documentation')
+
+    #!/usr/bin/python3
+"""
+This module defines a command interpreter class that
+parses and executes commands entered by the user.
+"""
 
 import cmd
+import json
 from models.base_model import BaseModel
-from models.user import User
-from models.amenity import Amenity
-from models.city import City
-from models.state import State
-from models.review import Review
-from models.place import Place
-from models.__init__ import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -19,16 +53,8 @@ class HBNBCommand(cmd.Cmd):
     This class defines a command interpreter.
     """
     prompt = '(hbnb) '
-
+    classes = {'BaseModel': BaseModel}
     valid_attrs = ['id', 'created_at', 'updated_at']
-
-    classes = {"BaseModel": BaseModel,
-               "User": User,
-               "State": State,
-               "City": City,
-               "Amenity": Amenity,
-               "Place": Place,
-               "Review": Review}
 
     def emptyline(self):
         """
@@ -93,41 +119,50 @@ class HBNBCommand(cmd.Cmd):
 
         print(self.__objects[key])
 
-    def do_destroy(self, line):
-        """destroy method"""
-        args = line.split()
-        if len(args) == 0:
+    def do_destroy(self, args):
+        """
+        This method deletes an instance based on the class name and id.
+        """
+        args_list = args.split()
+        if not args_list:
             print("** class name missing **")
             return
-        if len(args) == 1:
+
+        class_name = args_list[0]
+        if class_name not in self.classes:
+            print("** class doesn't exist **")
+            return
+
+        if len(args_list) < 2:
             print("** instance id missing **")
             return
-        class_name = args[0]
-        instance_id = args[1]
-        if class_name and instance_id:
-            all_obj = storage.all()
-            key = class_name + "." + instance_id
-            if key in all_obj:
-                del all_obj[key]
-                storage.save()
-            else:
-                print("** no instance found **")
-        else:
-            print("** class doesn't exist **")
 
-    def do_all(self, line):
-        """do all method"""
-        all_obj = storage.all()
-        args = line.split()
-        if len(args) == 0:
-            for key in all_obj.keys():
-                print(all_obj[key])
-        elif args[0] in all_obj:
-            for key in all_obj.keys():
-                if type(all_obj[key]).__name__ == args[0]:
-                    print(all_obj[key])
+        instance_id = args_list[1]
+        key = "{}.{}".format(class_name, instance_id)
+        if key not in self.__objects:
+            print("** no instance found **")
+            return
+
+        del self.__objects[key]
+        self.save()
+
+    def do_all(self, args):
+        """
+        This method prints all string representation of all instances
+        based or not on the class name.
+        """
+        if not args:
+            objects = self.__objects.values()
         else:
-            print("** class doesn't exist **")
+            class_name = args.split()[0]
+            if class_name not in self.classes:
+                print("** class doesn't exist **")
+                return
+
+            objects = [obj for obj in self.__objects.values()
+                       if type(obj).__name__ == class_name]
+
+        print([str(obj) for obj in objects])
 
     def do_update(self, args):
         """
