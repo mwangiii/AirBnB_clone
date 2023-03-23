@@ -142,14 +142,47 @@ class HBNBCommand(cmd.Cmd):
 
         print([str(obj) for obj in objects])
 
-    def do_update(self, args):
-        """
-        This method updates an instance based on the class name and id
-        by adding or updating attribute (save the change into the JSON file).
-        """
-        args_list = args.split()
-        if not args_list:
-            print("** class name missing **")
+def do_update(self, arg):
+    """Updates an instance based on the class name and id by adding or updating attribute
+    Usage: update <class name> <id> <attribute name> "<attribute value>"
+    """
+    args = arg.split()
+    if not args:
+        print("** class name missing **")
+        return
+    class_name = args[0]
+    if class_name not in self.classes:
+        print("** class doesn't exist **")
+        return
+    if len(args) < 2:
+        print("** instance id missing **")
+        return
+    obj_id = args[1]
+    obj_key = "{}.{}".format(class_name, obj_id)
+    if obj_key not in storage.all():
+        print("** no instance found **")
+        return
+    obj = storage.all()[obj_key]
+    if len(args) < 3:
+        print("** attribute name missing **")
+        return
+    attr_name = args[2]
+    if len(args) < 4:
+        print("** value missing **")
+        return
+    attr_value = " ".join(args[3:])
+    if hasattr(obj, attr_name):
+        attr_type = type(getattr(obj, attr_name))
+        try:
+            attr_value = attr_type(attr_value)
+        except ValueError:
+            print("** invalid value **")
+            return
+        setattr(obj, attr_name, attr_value)
+        obj.save()
+    else:
+        print("** no attribute found **")
+
 
 
 if __name__ == '__main__':
