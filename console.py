@@ -14,6 +14,15 @@ from models.place import Place
 from models.__init__ import storage
 
 
+def isfloat(arg):
+    """Checks if argument is a float data type variable"""
+    try:
+        float(arg)
+        return True
+    except ValueError:
+        return False
+
+
 def type_parser(arg):
     """Check data type of arg and cast it"""
     if arg.isalpha():
@@ -254,12 +263,6 @@ class HBNBCommand(cmd.Cmd):
                             storage.save()
                 if not check:
                     print("** no instance found **")
-
-    def help_update(self):
-        """Help output for the update command"""
-        print("Updates an instance based on the class name and id by\
-        adding or updating attribute (save the change into the JSON file)")
-        print()
 
 
 if __name__ == '__main__':
