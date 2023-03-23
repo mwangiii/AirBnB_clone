@@ -172,14 +172,17 @@ def do_update(self, arg):
     if obj_key not in storage.all():
         print("** no instance found **")
         return
+    
     obj = storage.all()[obj_key]
     if len(args) < 3:
         print("** attribute name missing **")
         return
+    
     attr_name = args[2]
     if len(args) < 4:
         print("** value missing **")
         return
+    
     attr_value = " ".join(args[3:])
     if hasattr(obj, attr_name):
         attr_type = type(getattr(obj, attr_name))
