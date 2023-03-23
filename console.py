@@ -16,15 +16,8 @@ from models.__init__ import storage
 class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
-    classes = {'BaseModel': BaseModel,
-               'User': User,
-               'State': State,
-                'City': City,
-                'Amenity': Amenity,
-                'Place' : Place,
-                'Review': Review}
-    
-
+    classes = {'BaseModel',
+               'User', 'State', 'City', 'Amenity', 'Place', 'Review'}
 
     valid_attrs = ['id', 'created_at', 'updated_at']
     __objects = storage.all()
@@ -126,12 +119,13 @@ class HBNBCommand(cmd.Cmd):
 
         instance_id = args_list[1]
         key = "{}.{}".format(class_name, instance_id)
-        if key not in storage.all():
+        all_instances = storage.all()
+        if key not in all_instances:
             print("** no instance found **")
             return
 
-        del self.storage.all()[key]
-        self.save()
+        del all_instances[key]
+        storage.save()
 
     def do_all(self, args):
         """
@@ -151,8 +145,10 @@ class HBNBCommand(cmd.Cmd):
 
         print([str(obj) for obj in objects])
 
+
 def do_update(self, arg):
-    """Updates an instance based on the class name and id by adding or updating attribute
+    """Updates an instance based on the class name and id by adding or
+    updating attribute
     Usage: update <class name> <id> <attribute name> "<attribute value>"
     """
     args = arg.split()
@@ -191,7 +187,6 @@ def do_update(self, arg):
         obj.save()
     else:
         print("** no attribute found **")
-
 
 
 if __name__ == '__main__':
