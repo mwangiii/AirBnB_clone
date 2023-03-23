@@ -16,7 +16,16 @@ from models.__init__ import storage
 class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
-    classes = {'BaseModel': BaseModel}
+    classes = {'BaseModel': BaseModel,
+               'User': User,
+               'State': State,
+                'City': City,
+                'Amenity': Amenity,
+                'Place' : Place,
+                'Review': Review}
+    
+
+
     valid_attrs = ['id', 'created_at', 'updated_at']
     __objects = storage.all()
 
