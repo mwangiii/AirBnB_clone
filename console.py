@@ -160,29 +160,32 @@ def do_update(self, arg):
     if not args:
         print("** class name missing **")
         return
+
     class_name = args[0]
-    if class_name not in self.classes:
+    if class_name not in HBNBCommand.classes:
         print("** class doesn't exist **")
         return
+
     if len(args) < 2:
         print("** instance id missing **")
         return
+
     obj_id = args[1]
     obj_key = "{}.{}".format(class_name, obj_id)
     if obj_key not in storage.all():
         print("** no instance found **")
         return
-    
+
     obj = storage.all()[obj_key]
     if len(args) < 3:
         print("** attribute name missing **")
         return
-    
+
     attr_name = args[2]
     if len(args) < 4:
         print("** value missing **")
         return
-    
+
     attr_value = " ".join(args[3:])
     if hasattr(obj, attr_name):
         attr_type = type(getattr(obj, attr_name))
@@ -192,7 +195,7 @@ def do_update(self, arg):
             print("** invalid value **")
             return
         setattr(obj, attr_name, attr_value)
-        obj.save()
+        storage.save()
     else:
         print("** no attribute found **")
 
