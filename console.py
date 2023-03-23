@@ -3,6 +3,7 @@
 This module contains the entry point of the command interpreter.
 """
 import cmd
+import re
 from models.base_model import BaseModel
 from models.user import User
 from models.amenity import Amenity
@@ -11,6 +12,17 @@ from models.state import State
 from models.review import Review
 from models.place import Place
 from models.__init__ import storage
+
+
+def type_parser(arg):
+    """Check data type of arg and cast it"""
+    if arg.isalpha():
+        pass
+    elif arg.isdigit():
+        arg = int(arg)
+    elif isfloat(arg):
+        arg = float(arg)
+    return arg
 
 
 class HBNBCommand(cmd.Cmd):
@@ -150,54 +162,104 @@ class HBNBCommand(cmd.Cmd):
 
         print([str(obj) for obj in objects])
 
+    def do_destroy(self, arg):
+        """
+        Deletes an instance based on the class name and id
+        (save the change into the JSON file)
+        """
+        line = arg.split()
+        if len(line) == 0:
+            print("** class name missing **")
+        else:
+            if not line[0] in self.__classes:
+                print("** class doesn't exist **")
+            elif len(line) != 2:
+                print("** instance id missing **")
+            else:
+                search_key = line[0] + "." + line[1]
+                check = False
+                for key, value in storage.all().items():
+                    if search_key == key:
+                        check = True
+                        del storage.all()[key]
+                        storage.save()
+                        break
+                if not check:
+                    print("** no instance found **")
 
-def do_update(self, arg):
-    """Updates an instance based on the class name and id by adding or
-    updating attribute
-    Usage: update <class name> <id> <attribute name> "<attribute value>"
-    """
-    args = arg.split()
-    if not args:
-        print("** class name missing **")
-        return
+    def help_destroy(self):
+        """Help output for the destroy command"""
+        print("Deletes an instance based on the class name and id\
+ (save the change into the JSON file)")
+        print()
 
-    class_name = args[0]
-    if class_name not in HBNBCommand.classes:
-        print("** class doesn't exist **")
-        return
+    def do_update(self, arg):
+        """
+        Updates an instance based on the class name and id by
+        adding or updating attribute (save the change into the JSON file)
+        """
+        # Finding the dict in arguments
+        match = re.search(r"{(.*)}", arg)
+        if match is not None:
+            # Splitting arg upto where the dictionary starts
+            line = arg[:match.span()[0]].split()
+            # Adding the dictionary to the list
+            line.append(match.group())
 
-    if len(args) < 2:
-        print("** instance id missing **")
-        return
+            ag = re.sub(':', ' ', ag)
+            # These two lines disassemble the dictionary to
+            # just arguments separated by white space
+            ag = re.sub('[}{\',]', '', line[2])
 
-    obj_id = args[1]
-    obj_key = "{}.{}".format(class_name, obj_id)
-    if obj_key not in storage.all():
-        print("** no instance found **")
-        return
+            ag = ag.split()
+            it = iter(ag)
+            # These two lines make the list a dictionary
+            ag = dict(zip(it, it))
 
-    obj = storage.all()[obj_key]
-    if len(args) < 3:
-        print("** attribute name missing **")
-        return
+            # reinitializing the dictionary
+            line[2] = ag
+        else:
+            line = arg.split()
+        if len(line) == 0:
+            print("** class name missing **")
+        else:
+            if not line[0] in self.__classes:
+                print("** class doesn't exist **")
+            elif len(line) == 1:
+                print("** instance id missing **")
+            else:
+                check = False
+                for key, value in storage.all().items():
+                    id_no = key.split(".")
+                    if id_no[1] == line[1] and id_no[0] == line[0]:
+                        check = True
+                        if len(line) == 2:
+                            print("** attribute name missing **")
 
-    attr_name = args[2]
-    if len(args) < 4:
-        print("** value missing **")
-        return
+                            # An argument list with a dict has len of 3
+                        elif len(line) == 3:
+                            # Converting string to dictionary
+                            dict_inst = line[2]
+                            # Checking if it is a dictionary
+                            if isinstance(dict_inst, dict):
+                                for input_key, input_val in dict_inst.items():
+                                    input_value = type_parser(input_val)
+                                    setattr(value, input_key, input_value)
+                                    storage.save()
+                            else:
+                                print("** value missing **")
+                        else:
+                            line[3] = type_parser(line[3])
+                            setattr(value, line[2], line[3])
+                            storage.save()
+                if not check:
+                    print("** no instance found **")
 
-    attr_value = " ".join(args[3:])
-    if hasattr(obj, attr_name):
-        attr_type = type(getattr(obj, attr_name))
-        try:
-            attr_value = attr_type(attr_value)
-        except ValueError:
-            print("** invalid value **")
-            return
-        setattr(obj, attr_name, attr_value)
-        storage.save()
-    else:
-        print("** no attribute found **")
+    def help_update(self):
+        """Help output for the update command"""
+        print("Updates an instance based on the class name and id by\
+        adding or updating attribute (save the change into the JSON file)")
+        print()
 
 
 if __name__ == '__main__':
