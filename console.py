@@ -149,7 +149,7 @@ class HBNBCommand(cmd.Cmd):
         """
         args_list = args.split()
         if not args_list:
-            print("** attribute name missing **")
+            print("** class name missing **")
 
 
 if __name__ == '__main__':
