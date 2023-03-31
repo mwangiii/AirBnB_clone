@@ -16,6 +16,7 @@ class test_basemodel(unittest.TestCase):
         super().__init__(*args, **kwargs)
         self.name = 'BaseModel'
         self.value = BaseModel
+
     def setUp(self):
         """ """
         pass
@@ -23,7 +24,7 @@ class test_basemodel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        except FileNotFoundError:
             pass
 
     def test_default(self):
@@ -45,7 +46,7 @@ class test_basemodel(unittest.TestCase):
         copy.update({1: 2})
         with self.assertRaises(TypeError):
             new = BaseModel(**copy)
-            
+
     def test_save(self):
         """ Testing save """
         i = self.value()
@@ -78,7 +79,7 @@ class test_basemodel(unittest.TestCase):
         n = {'Name': 'test'}
         with self.assertRaises(KeyError):
             new = self.value(**n)
-            
+
     def test_id(self):
         """ """
         new = self.value()
